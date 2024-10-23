@@ -1,1 +1,1 @@
-# Product_ManagementAPI_for_An_eCommercePlatform
+# Product Management API for an eCommerce Platform (Following DDD Principles)
