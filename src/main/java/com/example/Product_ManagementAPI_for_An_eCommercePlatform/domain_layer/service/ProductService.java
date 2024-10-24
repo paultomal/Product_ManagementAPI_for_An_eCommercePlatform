@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @AllArgsConstructor
@@ -27,5 +28,10 @@ public class ProductService {
 
         log.info("Product is created. Name: {}", product.getName());
         return product;
+    }
+
+    public List<Product> getAllProduct() {
+        log.info("Get all products");
+        return productRepository.findAll();
     }
 }
