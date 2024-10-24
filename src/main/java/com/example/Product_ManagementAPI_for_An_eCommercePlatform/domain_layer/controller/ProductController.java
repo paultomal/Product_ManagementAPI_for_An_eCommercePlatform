@@ -29,4 +29,10 @@ public class ProductController {
         List<Product> products = productService.getAllProduct();
         return ResponseEntity.ok(products);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getProductById(@PathVariable Long id) {
+        Product product = productService.getProductById(id);
+        return ResponseEntity.ok(ProductDTO.from(product));
+    }
 }

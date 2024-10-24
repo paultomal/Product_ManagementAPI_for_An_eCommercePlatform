@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @AllArgsConstructor
@@ -33,5 +34,10 @@ public class ProductService {
     public List<Product> getAllProduct() {
         log.info("Get all products");
         return productRepository.findAll();
+    }
+
+    public Product getProductById(Long id) {
+        Optional<Product> product = productRepository.findById(id);
+        return product.orElse(null);
     }
 }
