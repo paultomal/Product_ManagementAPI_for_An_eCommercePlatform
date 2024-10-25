@@ -28,7 +28,7 @@ public class ProductService implements Serializable {
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
         product.setPrice(productDTO.getPrice());
-        Category category = new Category(productDTO.getCategory_name());  // Create Category value object
+        Category category = new Category(productDTO.getCategoryName());
         product.setCategory(category);
         product.setStockQuantity(productDTO.getStockQuantity());
         productRepository.save(product);
@@ -57,7 +57,7 @@ public class ProductService implements Serializable {
             existingProduct.setDescription(productDTO.getDescription());
             existingProduct.setPrice(productDTO.getPrice());
 
-            Category category = new Category(productDTO.getCategory_name());
+            Category category = new Category(productDTO.getCategoryName());
             existingProduct.setCategory(category);
 
             productRepository.save(existingProduct);
