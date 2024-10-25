@@ -1,10 +1,10 @@
 package com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.application.controller;
 
+import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.application.service.ProductService;
 import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.dto.PaginatedProductResponse;
 import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.dto.ProductDTO;
 import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.dto.UpdateStockDTO;
 import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.entity.Product;
-import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.application.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -86,6 +87,16 @@ public class ProductController {
     @PatchMapping("/{id}/update-stock")
     public ResponseEntity<?> updateStock(@PathVariable Long id, @Valid @RequestBody UpdateStockDTO updateStockDTO) {
         ProductDTO updatedProduct = productService.updateStock(id, updateStockDTO);
+        if (updatedProduct != null) {
+            return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Product Not Found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PatchMapping("/{id}/apply-discount")
+    public ResponseEntity<?> applyDiscount(@PathVariable Long id, @RequestParam BigDecimal discount) {
+        ProductDTO updatedProduct = productService.applyDiscount(id, discount);
         if (updatedProduct != null) {
             return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
         } else {

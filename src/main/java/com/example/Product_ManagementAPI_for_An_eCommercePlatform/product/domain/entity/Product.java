@@ -40,4 +40,13 @@ public class Product extends BaseEntity {
     @NotBlank(message = "Category is required.")
     @Column(name = "category", nullable = false)
     private String category;
+
+    @Min(value = 0, message = "Discount must be non-negative.")
+    @Column(name = "discount", nullable = false)
+    private BigDecimal discount = BigDecimal.ZERO; // percentage
+
+    public BigDecimal calculateDiscountedPrice() {
+        BigDecimal discountMultiplier = BigDecimal.ONE.subtract(discount.divide(BigDecimal.valueOf(100)));
+        return price.multiply(discountMultiplier);
+    }
 }

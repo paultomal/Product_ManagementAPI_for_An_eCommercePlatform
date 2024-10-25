@@ -15,6 +15,8 @@ public class ProductDTO extends BaseDTO {
     private String name;
     private String description;
     private BigDecimal price;
+    private BigDecimal discount;
+    private BigDecimal discountedPrice;
     private Integer stockQuantity;
     private String category;
 
@@ -25,6 +27,8 @@ public class ProductDTO extends BaseDTO {
         productDTO.setName(product.getName());
         productDTO.setDescription(product.getDescription());
         productDTO.setPrice(product.getPrice());
+        productDTO.setDiscount(product.getDiscount());
+        productDTO.setDiscountedPrice(product.calculateDiscountedPrice());
         productDTO.setStockQuantity(product.getStockQuantity());
         productDTO.setCategory(product.getCategory());
         productDTO.setCreatedAt(product.getCreatedAt());

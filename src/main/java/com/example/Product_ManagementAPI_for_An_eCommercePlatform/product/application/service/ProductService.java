@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.Valid;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Slf4j
@@ -78,6 +79,17 @@ public class ProductService implements Serializable {
             product.setStockQuantity(updateStockDTO.getStockQuantity());
             productRepository.save(product);
             log.info("Stock is updated. Name of The Product: {}", product.getName());
+            return ProductDTO.from(product);
+        }
+        return null;
+    }
+    public ProductDTO applyDiscount(Long id, BigDecimal discount) {
+        Optional<Product> productOptional = productRepository.findById(id);
+
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            product.setDiscount(discount);
+            productRepository.save(product);
             return ProductDTO.from(product);
         }
         return null;
