@@ -2,6 +2,7 @@ package com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.appli
 
 import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.dto.ProductDTO;
 import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.dto.UpdateStockDTO;
+import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.entity.Category;
 import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.entity.Product;
 import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.repository.ProductRepository;
 import lombok.AllArgsConstructor;
@@ -27,7 +28,8 @@ public class ProductService implements Serializable {
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
         product.setPrice(productDTO.getPrice());
-        product.setCategory(productDTO.getCategory());
+        Category category = new Category(productDTO.getCategory_name());  // Create Category value object
+        product.setCategory(category);
         product.setStockQuantity(productDTO.getStockQuantity());
         productRepository.save(product);
 
@@ -50,13 +52,17 @@ public class ProductService implements Serializable {
         Optional<Product> product = productRepository.findById(id);
 
         if (product.isPresent()) {
-            product.get().setName(productDTO.getName());
-            product.get().setDescription(productDTO.getDescription());
-            product.get().setPrice(productDTO.getPrice());
-            product.get().setCategory(productDTO.getCategory());
-            productRepository.save(product.get());
+            Product existingProduct = product.get();
+            existingProduct.setName(productDTO.getName());
+            existingProduct.setDescription(productDTO.getDescription());
+            existingProduct.setPrice(productDTO.getPrice());
+
+            Category category = new Category(productDTO.getCategory_name());
+            existingProduct.setCategory(category);
+
+            productRepository.save(existingProduct);
             log.info("Product is updated. Name: {}", productDTO.getName());
-            return product.get();
+            return existingProduct;
         }
         return null;
     }
@@ -83,6 +89,7 @@ public class ProductService implements Serializable {
         }
         return null;
     }
+
     public ProductDTO applyDiscount(Long id, BigDecimal discount) {
         Optional<Product> productOptional = productRepository.findById(id);
 

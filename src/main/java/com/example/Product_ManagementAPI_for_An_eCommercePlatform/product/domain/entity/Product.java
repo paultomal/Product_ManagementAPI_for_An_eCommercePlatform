@@ -2,6 +2,7 @@ package com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domai
 
 import com.example.Product_ManagementAPI_for_An_eCommercePlatform.common.entity.BaseEntity;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import lombok.AllArgsConstructor;
@@ -37,9 +38,8 @@ public class Product extends BaseEntity {
     @Column(name = "stock_quantity", nullable = false)
     private Integer stockQuantity;
 
-    @NotBlank(message = "Category is required.")
-    @Column(name = "category", nullable = false)
-    private String category;
+    @Embedded
+    private Category category;
 
     @Min(value = 0, message = "Discount must be non-negative.")
     @Column(name = "discount", nullable = false)
