@@ -1,4 +1,4 @@
-package com.example.Product_ManagementAPI_for_An_eCommercePlatform.domain_layer.entity;
+package com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.entity;
 
 import com.example.Product_ManagementAPI_for_An_eCommercePlatform.common.entity.BaseEntity;
 import jakarta.persistence.Column;

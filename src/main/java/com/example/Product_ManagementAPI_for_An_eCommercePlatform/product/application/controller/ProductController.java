@@ -1,17 +1,20 @@
-package com.example.Product_ManagementAPI_for_An_eCommercePlatform.domain_layer.controller;
+package com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.application.controller;
 
-import com.example.Product_ManagementAPI_for_An_eCommercePlatform.domain_layer.dto.ProductDTO;
-import com.example.Product_ManagementAPI_for_An_eCommercePlatform.domain_layer.dto.UpdateStockDTO;
-import com.example.Product_ManagementAPI_for_An_eCommercePlatform.domain_layer.entity.Product;
-import com.example.Product_ManagementAPI_for_An_eCommercePlatform.domain_layer.service.ProductService;
+import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.dto.PaginatedProductResponse;
+import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.dto.ProductDTO;
+import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.dto.UpdateStockDTO;
+import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.entity.Product;
+import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.application.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/product")
@@ -29,11 +32,25 @@ public class ProductController {
     }
 
     @GetMapping("/getAllProduct")
-    public ResponseEntity<?> getAllProduct(@RequestParam(defaultValue = "0") int page,
-                                           @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Product> productPage = productService.getAllProduct(pageable);
-        return ResponseEntity.ok(productPage);
+    public ResponseEntity<PaginatedProductResponse> getAllProduct(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy) {
+
+        Sort sort = Sort.by(sortBy).ascending();
+        if (!List.of("id", "name", "price", "stockQuantity").contains(sortBy)) {
+            sort = Sort.by("id").ascending();
+        }
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<ProductDTO> productPage = productService.getAllProduct(pageable).map(ProductDTO::from);
+
+        PaginatedProductResponse response = new PaginatedProductResponse();
+        response.setPageNumber(productPage.getNumber());
+        response.setPageSize(productPage.getSize());
+        response.setProducts(productPage.getContent());
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")

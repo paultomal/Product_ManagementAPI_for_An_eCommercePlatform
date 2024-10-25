@@ -1,6 +1,6 @@
-package com.example.Product_ManagementAPI_for_An_eCommercePlatform.domain_layer.repository;
+package com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.repository;
 
-import com.example.Product_ManagementAPI_for_An_eCommercePlatform.domain_layer.entity.Product;
+import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

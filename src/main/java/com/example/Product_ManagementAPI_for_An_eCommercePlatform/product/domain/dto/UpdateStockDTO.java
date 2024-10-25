@@ -1,4 +1,4 @@
-package com.example.Product_ManagementAPI_for_An_eCommercePlatform.domain_layer.dto;
+package com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

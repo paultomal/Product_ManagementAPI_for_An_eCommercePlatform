@@ -1,9 +1,9 @@
-package com.example.Product_ManagementAPI_for_An_eCommercePlatform.domain_layer.service;
+package com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.application.service;
 
-import com.example.Product_ManagementAPI_for_An_eCommercePlatform.domain_layer.dto.ProductDTO;
-import com.example.Product_ManagementAPI_for_An_eCommercePlatform.domain_layer.dto.UpdateStockDTO;
-import com.example.Product_ManagementAPI_for_An_eCommercePlatform.domain_layer.entity.Product;
-import com.example.Product_ManagementAPI_for_An_eCommercePlatform.domain_layer.repository.ProductRepository;
+import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.dto.ProductDTO;
+import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.dto.UpdateStockDTO;
+import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.entity.Product;
+import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

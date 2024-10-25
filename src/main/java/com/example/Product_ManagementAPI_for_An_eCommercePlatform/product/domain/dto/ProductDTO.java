@@ -1,13 +1,12 @@
-package com.example.Product_ManagementAPI_for_An_eCommercePlatform.domain_layer.dto;
+package com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.dto;
 
 import com.example.Product_ManagementAPI_for_An_eCommercePlatform.common.dto.BaseDTO;
-import com.example.Product_ManagementAPI_for_An_eCommercePlatform.domain_layer.entity.Product;
+import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.entity.Product;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
