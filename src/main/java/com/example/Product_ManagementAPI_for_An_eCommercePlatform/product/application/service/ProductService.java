@@ -1,5 +1,7 @@
 package com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.application.service;
 
+import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.event.ProductCreatedEvent;
+import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.event.ProductStockUpdatedEvent;
 import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.dto.ProductDTO;
 import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.dto.UpdateStockDTO;
 import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.entity.Category;
@@ -7,6 +9,7 @@ import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain
 import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,7 @@ import java.util.Optional;
 @Service
 public class ProductService implements Serializable {
     private final ProductRepository productRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
 
     public Product addProduct(@Valid ProductDTO productDTO) {
@@ -33,7 +37,8 @@ public class ProductService implements Serializable {
         product.setStockQuantity(productDTO.getStockQuantity());
         productRepository.save(product);
 
-        log.info("Product is created. Name: {}", product.getName());
+        eventPublisher.publishEvent(new ProductCreatedEvent(product));
+
         return product;
     }
 
@@ -77,14 +82,19 @@ public class ProductService implements Serializable {
         return false;
     }
 
-    public ProductDTO updateStock(Long id, UpdateStockDTO updateStockDTO) {
+    public ProductDTO updateStock(Long id, @Valid UpdateStockDTO updateStockDTO) {
         Optional<Product> productOptional = productRepository.findById(id);
 
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
-            product.setStockQuantity(updateStockDTO.getStockQuantity());
+            int oldStock = product.getStockQuantity();
+            int newStock = updateStockDTO.getStockQuantity();
+
+            product.setStockQuantity(newStock);
             productRepository.save(product);
-            log.info("Stock is updated. Name of The Product: {}", product.getName());
+
+            eventPublisher.publishEvent(new ProductStockUpdatedEvent(product, oldStock, newStock));
+
             return ProductDTO.from(product);
         }
         return null;
