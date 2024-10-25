@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @EqualsAndHashCode(callSuper = true)
@@ -14,12 +17,25 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductDTO extends BaseDTO {
+    @NotBlank(message = "Product name is required.")
     private String name;
+
     private String description;
+
+    @NotNull(message = "Price is required.")
+    @Min(value = 0, message = "Price must be positive.")
     private BigDecimal price;
+
+    @Min(value = 0, message = "Discount must be non-negative.")
     private BigDecimal discount;
+
     private BigDecimal discountedPrice;
+
+    @NotNull(message = "Stock quantity is required.")
+    @Min(value = 0, message = "Stock quantity must be non-negative.")
     private Integer stockQuantity;
+
+    @NotBlank(message = "Category name is required.")
     private String categoryName;
 
     public static ProductDTO from(Product product) {

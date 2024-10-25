@@ -1,5 +1,6 @@
 package com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.application.controller;
 
+import com.example.Product_ManagementAPI_for_An_eCommercePlatform.common.excptions.ProductNameAlreadyTakenException;
 import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.application.service.ProductService;
 import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.dto.PaginatedProductResponse;
 import com.example.Product_ManagementAPI_for_An_eCommercePlatform.product.domain.dto.ProductDTO;
@@ -28,8 +29,23 @@ public class ProductController {
 
     @PostMapping("/add_product")
     public ResponseEntity<?> addProduct(@Valid @RequestBody ProductDTO productDTO) {
-        ProductDTO productDTO1 = ProductDTO.from(productService.addProduct(productDTO));
-        return ResponseEntity.ok(productDTO1);
+        if (productService.getProductByName(productDTO.getName()).isPresent()) {
+            throw new ProductNameAlreadyTakenException("Product name '" + productDTO.getName() + "' is already taken! Please try another.");
+        }
+        if (productDTO.getName() == null) {
+            throw new IllegalArgumentException("Product name cannot be empty! Please try another.");
+        }
+        if (productDTO.getPrice() == null || productDTO.getPrice().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Price cannot be null or negative.");
+        }
+        if (productDTO.getStockQuantity() == null || productDTO.getStockQuantity() < 0) {
+            throw new IllegalArgumentException("Stock quantity cannot be null or negative.");
+        }
+        if (productDTO.getCategoryName() == null || productDTO.getCategoryName().isEmpty()) {
+            throw new IllegalArgumentException("Category cannot be null or empty.");
+        }
+        ProductDTO savedProduct = ProductDTO.from(productService.addProduct(productDTO));
+        return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
 
     @GetMapping("/getAllProduct")
@@ -87,6 +103,9 @@ public class ProductController {
     @PatchMapping("/{id}/update-stock")
     public ResponseEntity<?> updateStock(@PathVariable Long id, @Valid @RequestBody UpdateStockDTO updateStockDTO) {
         ProductDTO updatedProduct = productService.updateStock(id, updateStockDTO);
+        if (updatedProduct.getStockQuantity() == null || updatedProduct.getStockQuantity() < 0) {
+            throw new IllegalArgumentException("Stock quantity cannot be null or negative.");
+        }
         if (updatedProduct != null) {
             return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
         } else {
@@ -96,6 +115,9 @@ public class ProductController {
 
     @PatchMapping("/{id}/apply-discount")
     public ResponseEntity<?> applyDiscount(@PathVariable Long id, @RequestParam BigDecimal discount) {
+        if (discount.compareTo(BigDecimal.ZERO) < 0 || discount.compareTo(BigDecimal.valueOf(100)) > 0) {
+            return new ResponseEntity<>("Discount must be between 0 and 100.", HttpStatus.BAD_REQUEST);
+        }
         ProductDTO updatedProduct = productService.applyDiscount(id, discount);
         if (updatedProduct != null) {
             return new ResponseEntity<>(updatedProduct, HttpStatus.OK);

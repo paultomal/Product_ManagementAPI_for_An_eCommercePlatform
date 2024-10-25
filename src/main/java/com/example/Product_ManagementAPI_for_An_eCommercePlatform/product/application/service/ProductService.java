@@ -27,6 +27,10 @@ public class ProductService implements Serializable {
     private final ApplicationEventPublisher eventPublisher;
 
 
+    public Optional<Product> getProductByName(String name) {
+        return productRepository.findByName(name);
+    }
+
     public Product addProduct(@Valid ProductDTO productDTO) {
         Product product = new Product();
         product.setName(productDTO.getName());
