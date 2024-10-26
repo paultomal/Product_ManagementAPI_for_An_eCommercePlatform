@@ -78,6 +78,15 @@ public class ProductController {
 
     @PutMapping("/updateProduct/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductDTO productDTO) {
+        if (productDTO.getName() == null) {
+            throw new IllegalArgumentException("Product name cannot be empty! Please try another.");
+        }
+        if (productDTO.getPrice() == null || productDTO.getPrice().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Price cannot be null or negative.");
+        }
+        if (productDTO.getCategoryName() == null || productDTO.getCategoryName().isEmpty()) {
+            throw new IllegalArgumentException("Category cannot be null or empty.");
+        }
         Product product = productService.getProductById(id);
         if (product != null) {
             ProductDTO productDTO1 = ProductDTO.from(productService.updateProduct(id, productDTO));
