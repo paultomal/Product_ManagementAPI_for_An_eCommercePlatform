@@ -41,13 +41,13 @@ The API uses an H2 in-memory database for storing product data. This database is
 
 ## API Endpoints
 ### Product Management
-- GET /product - Retrieve all products (supports pagination).
+- GET /product/getAllProduct?page={{$random.integer(100)}}&size={{$random.integer(100)}}&sortBy={{$random.alphanumeric(8)}}) - Retrieve all products (supports pagination).
 - GET /product/{id} - Retrieve a product by its unique ID.
-- POST /product - Create a new product.
+- POST /product/add_product - Create a new product.
 - PUT /products/updateProduct/{id} - Update details of an existing product by ID.
-- DELETE /product//deleteProduct/{id} - Delete a product by ID.
+- DELETE /product/deleteProduct/{id} - Delete a product by ID.
 - PATCH /product/{id}/update-stock - Update the stock quantity of a product.
-- PATCH /product/{id}/apply-discount - Apply Discount to a product.
+- PATCH /product/{{id}}/apply-discount?discount={{$placeholder}} - Apply Discount to a product.
 
 ## API DOCUMENTATION
 ### POSTMAN API DOC: https://documenter.getpostman.com/view/26556785/2sAY4sj4uv
